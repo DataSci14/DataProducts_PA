@@ -1,0 +1,81 @@
+---
+title       : Marketing analysis study of household incomes
+subtitle    : Sunday, May 24, 2015
+author      : Michael
+job         : 
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+<style type='text/css'>
+img {
+    max-height: 360px;
+    max-width: 664px;
+}
+</style>
+
+## Study overview
+* A survey was conducted in to determine demographic attributes that influence household income.  
+
+* 8,993 observations and 14 variables were collected (during the 1987 study in San Francisco) and included in the analysis.  Key variables include the following: Income, Sex, Marital status, Age, Education, Occupation, Years living in San Francisco, Dual Income, Household count, Household count under 18, Homeowner Status, Home type, Ethnic, and language.
+
+* Data is compiled and simple analysis performed via histogram plotting.  
+
+```{r, echo=FALSE}
+library(ElemStatLearn)
+library(ggplot2)
+data(marketing)
+df <- subset(marketing, marketing$Income=="7")
+Income <- df$Income
+Age <- gsub("^1","14-17",df$Age)
+Age <- gsub("^2","18-24",Age)
+Age <- gsub("^3","25-34",Age)
+Age <- gsub("^4","35-44",Age)
+Age <- gsub("^5","45-54",Age)
+Age <- gsub("^6","55-64",Age)
+Age <- gsub("^7",">65",Age)
+temp <- cbind(Income, Age)
+temp <- as.data.frame(temp)
+temp <- subset(temp, select=c("Age"))
+colnames(temp) <- c("type")
+temp <- subset(temp, temp[,1]!="NA")
+```
+
+--- .class #id
+
+## ShinyApp to view Market survey analysis
+* ShinyApp server and user interface can be used to conveniently cycle through data parameters making it easy to distinguish key variables contributing to household income.  
+
+* Simply select an attribute from the attribute menu and select a household income range and a histogram plot is generated within seconds.  
+
+* Quickly compare new variables... clicking another parameter(radio button) will automatically update the histogram to your selection.  
+
+
+--- .class #id 
+
+## Example plot generated from Shinyapp
+```{r, echo=TRUE}
+g <- ggplot(temp, aes(type))
+g + geom_histogram(aes(fill=type), stat = "bin") + labs(title = paste("$40k-$50k 
+Annual Household Income")) + guides(fill=guide_legend(title="Age")) + 
+  theme(axis.text.x = element_text(angle = 30, vjust = 0.5, size = 12))
+```
+
+
+--- .class #id
+
+## Conclusion
+* ShinyApp provides added convenience for the market analysis study.  
+
+* 13 variables with 9 choices of household income adds up to 100+ total plots.  ShinyApp makes data analysis enjoyable with one interactive plot.  
+
+* Stay focused on analysis with all market analysis data accessible at once.  
+
+* https://datasci14.shinyapps.io/datasci14/
+
+
+
+
